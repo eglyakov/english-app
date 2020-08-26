@@ -1,12 +1,6 @@
 import React from 'react';
 import logo from '../img/logo.png'
-// import { ReactComponent } from '*.svg';
-
-// class Nav extends React.Component {
-//     return (
-
-//     )
-// }
+import {NavLink} from 'react-router-dom';
 
 function Nav() {
     return (
@@ -17,9 +11,9 @@ function Nav() {
             </div>
 
             <ul>
-                <li className="active">Library</li>
-                <li>Trainig</li>
-                <li>Learn</li>
+                <li><NavLink to='/library'>Library</NavLink></li>
+                <li><NavLink to='/training'>Training</NavLink></li>
+                <li><NavLink to='/learn'>Learn</NavLink></li>
             </ul>
         </nav>
     );

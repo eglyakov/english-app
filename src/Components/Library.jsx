@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Input extends React.Component {
+class Library extends React.Component {
 
     constructor(props) {
         super(props);
@@ -81,7 +81,7 @@ class Input extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="library-block">
                 <div className="input">
                     {
                     this.state.isOpen ?
@@ -109,7 +109,7 @@ class Input extends React.Component {
                             <td>{word.id}</td>
                             <td>{word.word}</td>
                             <td>{word.translate}</td>
-                            <td onClick={() => this.removeWordFromLibrary(index)}>Delete</td>
+                            <td onClick={() => this.removeWordFromLibrary(index)} className="btn-delete">Delete</td>
                         </tr> 
                     ))}
                     </tbody>
@@ -119,5 +119,4 @@ class Input extends React.Component {
     }
 }
 
-export default Input;
-
+export default Library;
