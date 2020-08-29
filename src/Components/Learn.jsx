@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
-const Learn = () => {
+const Learn = ({setScore, score, CheckLevel}) => {
     const library = JSON.parse(localStorage.getItem('library')) || [{id: 0, word: '', translate: ''}];
 
     const [index, setIndex] = useState(0),
@@ -10,6 +10,12 @@ const Learn = () => {
     const nextWord = () => {
         if (library.length - 1 !== index) {
             setIndex(index + 1);
+            setScore(score + 0.5);
+            CheckLevel();
+            library[index].correct += 1;
+            library[index].learn += 1;
+            // library[index].learn = Math.floor((word.learn + word.correct - word.error) / 5 * 10);
+            localStorage.setItem('library', JSON.stringify(library));
         } else {
             setEnd(true);
         }
@@ -20,13 +26,17 @@ const Learn = () => {
         setIndex(0);
     } 
 
+    useEffect(() => {
+        localStorage.setItem('score', score);
+    }, [score]) 
+
     return (
         <div className="learn">
             <div className="learn-block">
                 {
                     end ? 
                     null :
-                    <div className="percentage">50%</div>                    
+                    <div className="percentage">{word.learn}%</div>                    
                 }
                 <div className="word">
                     {end ? 'Well done!' : word.translate}

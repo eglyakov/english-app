@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 
 export default (props) => {
-    const checkWords = (word) => {
+    const [currentWordIndex, setCurrentWordIndex] = useState(0),
+        [library, setLibrary] = useState(JSON.parse(localStorage.getItem('library')) || [{id: 0, word: '', translate: ''}, {id: 0, word: '', translate: ''}, {id: 0, word: '', translate: ''}]),
+        [checkArr, setCheckArr] = useState([]),
+        currentWord = library[currentWordIndex].translate;
 
+    const checkWords = (word) => {
         if(library.length - 1 !== currentWordIndex) {
             if(word === library[currentWordIndex].word) {
                 props.setCorrectAnswer(props.correctAnswer + 1)
                 props.setScore(props.score + 1)
                 setCurrentWordIndex(currentWordIndex + 1);
+                props.CheckLevel();
+                library[currentWordIndex].correct += 1;
+                library[currentWordIndex].learn += 2;
+                localStorage.setItem('library', JSON.stringify(library));
             } else {
-                props.setWrongAnswer(props.wrongAnswer + 1)
+                props.setWrongAnswer(props.wrongAnswer + 1);
+                library[currentWordIndex].error += 1;
+                localStorage.setItem('library', JSON.stringify(library));
             }
         } else {
             alert('Well done');
@@ -18,12 +28,6 @@ export default (props) => {
             setCurrentWordIndex(0);
         }      
     }
-
-    const [currentWordIndex, setCurrentWordIndex] = useState(0),
-        [library, setLibrary] = useState(JSON.parse(localStorage.getItem('library'))),
-        [checkArr, setCheckArr] = useState([]),
-        currentWord = library[currentWordIndex].translate,
-        [initialScore, setInitialScore] = useState(props.score);
 
     useEffect(() => {
         const filterArr = library.filter((item, index) => index !== currentWordIndex);
@@ -34,10 +38,8 @@ export default (props) => {
     }, [props.correctAnswer])
 
     useEffect(() => {
-        return () => {
-            props.setScore(initialScore)
-        }
-    }, [])
+        localStorage.setItem('score', props.score);
+    }, [props.score]) 
 
     return (
         <div className="checkModeGame">
@@ -47,10 +49,10 @@ export default (props) => {
             </div>
             <div className="translat-block">
                 {
-                    checkArr.map((item, index) => 
-                    <div key={index} className="translat" onClick={() => checkWords(item)}> 
-                        {item}
-                    </div>)
+                checkArr.map((item, index) => 
+                <div key={index} className="translat" onClick={() => checkWords(item)}> 
+                    {item}
+                </div>)
                 }
             </div>
         </div>

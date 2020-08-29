@@ -9,22 +9,47 @@ import Learn from './Components/Learn.jsx';
 import Game from './Components/Games/Game.jsx';
 
 function App() {
-  const [score, setScore] = useState(0)
+  const countLevel = () => {
+    return Math.floor(0.5 + Math.sqrt(1 + 8 * score / 5) / 2) - 1;
+  }
+
+  const [score, setScore] = useState(+localStorage.getItem('score') || 0),
+    [level, setLevel] = useState(countLevel());
+
+  const CheckLevel = () => {
+    setLevel(countLevel());
+  }
+
   return (
     <BrowserRouter>
     <div className="app">
-      <Nav />
+      <Nav level={level} />
+
       <div className="main">
-        <Score />
+        <Score score={score} />
         <Route path='/library' component={Library}/>
         <Route path='/training' component={Training}/>
-        <Route path='/learn' component={Learn}/>
+        <Route path='/learn'>
+          <Learn setScore={setScore}
+                score={score}
+                CheckLevel={CheckLevel}
+          />
+        </Route>
+
         <Route path='/training/check-mode'> 
           <Game setScore={setScore}
                 score={score}
+                CheckLevel={CheckLevel}
+          />
+        </Route>
+        <Route path='/training/write-mode'> 
+          <Game setScore={setScore}
+                score={score}
+                CheckLevel={CheckLevel}
           />
         </Route>
       </div>
+
     </div>
     </BrowserRouter>
   );

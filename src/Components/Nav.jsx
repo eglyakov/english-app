@@ -2,12 +2,12 @@ import React from 'react';
 import logo from '../img/logo.png'
 import {NavLink} from 'react-router-dom';
 
-function Nav() {
+const Nav = ({level}) => {
     return (
         <nav className="nav">
             <div className="nav_block">
                 <div className="logo"><img src={logo} alt="logo"/></div>
-                <div className="level">Level 0</div>
+                <div className="level">Level {level}</div>
             </div>
 
             <ul>

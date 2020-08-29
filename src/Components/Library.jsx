@@ -8,7 +8,7 @@ class Library extends React.Component {
             isOpen: true,
             translation: '',
             value: '',
-            library: JSON.parse(localStorage.getItem('library')) || [{id: 0, word: '', translate: ''}]
+            library: JSON.parse(localStorage.getItem('library')) || []
         }
 
         this.changeMode = this.changeMode.bind(this);
@@ -55,7 +55,7 @@ class Library extends React.Component {
             };
 
             await this.setState(prevState => ({
-                library: [...prevState.library, {id: this.state.library.length, word: this.state.value, translate: this.state.translation }]
+                library: [...prevState.library, {id: this.state.library.length, word: this.state.value, translate: this.state.translation, correct: 0, learn: 0, error: 0}]
             }));
 
             await localStorage.setItem('library', JSON.stringify(this.state.library));
@@ -66,7 +66,6 @@ class Library extends React.Component {
                 translation: ''
             }))
         }
-
         catch (error) {
             console.log(error);
         }
@@ -94,26 +93,25 @@ class Library extends React.Component {
                     }
                     <button onClick={this.changeMode} className={this.state.isOpen ? 'btn_plus' : 'btn_plus open'}></button>
                 </div>
+                
+                <div className="library">
+                    <div className="header">
+                        <div className="title">Word</div>
+                        <div className="title">Translate</div>
+                        <div className="title">Learn level</div>
+                    </div>
 
-                <table className="tabel">
-                    <thead>
-                        <tr>
-                            <th>Word</th>
-                            <th>Translate</th>
-                            <th>Learn level</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <div className="word-table">
                     {this.state.library.map((word, index) => (
-                        <tr key={index}>
-                            <td>{word.id}</td>
-                            <td>{word.word}</td>
-                            <td>{word.translate}</td>
-                            <td onClick={() => this.removeWordFromLibrary(index)} className="btn-delete">Delete</td>
-                        </tr> 
+                        <div className="word-block" key={index}>
+                            <div className="item">{word.word}</div>
+                            <div className="item">{word.translate}</div>
+                            <div className="item">{word.learn}%</div>
+                            <div onClick={() => this.removeWordFromLibrary(index)} className="btn-delete">Delete</div>
+                        </div> 
                     ))}
-                    </tbody>
-                </table>
+                    </div>
+                </div>
             </div>
         );
     }
